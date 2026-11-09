@@ -49,7 +49,7 @@ def plan_time(cur, sql):
 
 QUERIES = {
     "one_week_one_city": "SELECT avg(temperature_c), max(wind_kmh) FROM {t} WHERE city='Tokyo' AND time >= '2025-07-01' AND time < '2025-07-08'",
-    "daily_avg_one_month": "SELECT time_bucket('1 day', time) d, city, avg(temperature_c) FROM {t} WHERE time >= '2025-03-01' AND time < '2025-04-01' GROUP BY 1,2 ORDER BY 1,2",
+    "daily_avg_one_month": "SELECT time_bucket('1 day', time) d, city, round(avg(temperature_c)::numeric, 2) AS avg_temp_c FROM {t} WHERE time >= '2025-03-01' AND time < '2025-04-01' GROUP BY 1,2 ORDER BY 1,2",
     "latest_reading_per_city": "SELECT DISTINCT ON (city) city, time, temperature_c FROM {t} WHERE time > '2025-12-30' ORDER BY city, time DESC",
 }
 
@@ -57,6 +57,7 @@ def main():
     url = os.environ["DATABASE_URL"]
     results = {}
     with psycopg.connect(url, autocommit=True) as conn, conn.cursor() as cur:
+        cur.execute("SET TimeZone = 'UTC'")
         cur.execute("SELECT version(), (SELECT extversion FROM pg_extension WHERE extname='timescaledb')")
         v, tsv = cur.fetchone()
         log(f"# Hypertable run on Tiger Cloud\n\nServer: `{v.split(',')[0]}`  \nTimescaleDB: `{tsv}`  \nRun at: {time.strftime('%Y-%m-%d %H:%M:%S %Z')}")
