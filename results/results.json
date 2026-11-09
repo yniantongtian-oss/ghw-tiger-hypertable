@@ -1,0 +1,25 @@
+{
+  "postgres": "PostgreSQL 18.6 (Ubuntu 18.6-1.pgdg22.04+2) on aarch64-unknown-linux-gnu",
+  "timescaledb": "2.31.0",
+  "rows": 140352,
+  "size_before": "29 MB",
+  "size_after": "15 MB",
+  "compression_ratio": 2.0,
+  "timings_ms": {
+    "plain": {
+      "one_week_one_city": 0.18,
+      "daily_avg_one_month": 3.13,
+      "latest_reading_per_city": 0.11
+    },
+    "hypertable": {
+      "one_week_one_city": 0.15,
+      "daily_avg_one_month": 2.47,
+      "latest_reading_per_city": 0.11
+    },
+    "columnstore": {
+      "one_week_one_city": 1.2,
+      "daily_avg_one_month": 2.5,
+      "latest_reading_per_city": 0.11
+    }
+  }
+}
